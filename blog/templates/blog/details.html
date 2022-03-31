@@ -1,0 +1,102 @@
+{% extends 'public/base.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block title %} {{ blog.title }} - iGET Blogs {% endblock %}
+
+
+{% block content %}
+<div class="wrapper">
+  <div class="section features-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto text-center">
+        <h4 class="display-3">Blog - iGET</h4>
+      </div>
+    </div><br>
+    <div class="row">
+      <div class="col-lg-7 mb-5 py-4 px-4">
+        <div class="info pb-4 px-3">
+          {% if blog.thumbnail %}
+          <img src="{{ blog.thumbnail.url }}" class="rounded img-fluid">
+          {% endif %}
+          <h4 class="info-title text-uppercase text-primary">{{blog.title}}</h4>
+
+          <span class="pr-2"><i class="ni ni-circle-08 text-primary pr-1"></i> {{blog.posted_by}}</span><br>
+          <span><i class="ni ni-calendar-grid-58 text-primary pr-1"></i> {{blog.posted_on}}</span>
+
+          <p class="description display-4">
+            {{ blog.overview|safe }}
+          </p>
+        </div>
+      </div>
+      {% if others.count > 0 %}
+      <div class="col-lg-5 mb-5 py-4 px-4">
+        <div class="info pb-4 px-3">
+          <h4>Recent Posts</h4>
+          {% for o in others %}
+          <div class="py-1 row">
+            {% if o.thumbnail %}
+            <img src="{{o.thumbnail.url}}" height="60">
+            {% endif %}
+            <div class="col-10">
+              <h6 class="text-primary"><a href="{% url 'blog_post' o.uuid %}"><b>{{ o.title }}</b></a></h6>
+              <p><b>{{ o.posted_by }}</b> {{ o.posted_on }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div><br>
+
+    <section class="row px-3">
+      <div class="col-lg-12">
+        <h5>Comments ({{ blog.comment_set.all.count|default:'0' }})</h5><br>
+        {% for c in blog.comment_set.all %}
+        <div class="py-1">
+          <h6 class="text-primary"><b>{{ c.posted_by }}</b> {{ c.posted_on }}</h6>
+          <p>{{ c.comment }}</p>
+          {% if c.posted_by == request.user %}
+            <span class="pr-2"><a href="#" type="button" data-toggle="modal" data-target="#exampleModalLong{{c.id}}"><b>Edit</b></a></span>
+            <span><a href="{% url 'delete_comment' c.id %}"><b>Delete</b></a></span>
+
+            <div class="modal fade" id="exampleModalLong{{ c.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Edit Comment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form method="POST" action="{% url 'edit_comment' c.id %}">
+                      {% csrf_token %}
+                      <textarea rows="5" class="form-control" name="comment">{{c.comment}}</textarea>
+                      <input type="submit" value="Post Comment" class="btn btn-primary">
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    <div class="row px-3 pt-4">
+      <form class="col-lg-7" method="POST">
+        {% csrf_token %}
+        <h4>Leave your thoughts</h4><br>
+        {% if request.user.is_authenticated %}
+        {{ form.comment }}<br>
+        <input type="submit" value="Post Comment" class="btn btn-primary">
+        {% else %}
+        <p>You need to login to post comments</p>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,263 @@
+{% extends 'projects/user_dashboard_base.html' %}
+{% load mathfilters %}
+{% block content %}
+<div class="header bg-primary pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+              <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="#">Cases</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <!-- Card stats -->
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Case Submitted</h5>
+                  <span class="h2 font-weight-bold mb-0">{{ cases.count }}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                    <i class="ni ni-folder-17"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Case Approved</h5>
+                  <span class="h2 font-weight-bold mb-0">{{ approved.count }}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-success text-white rounded-circle shadow">
+                    <i class="ni ni-check-bold"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Total Raised</h5>
+                  <span class="h2 font-weight-bold mb-0">&#8377; {{ received }}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-warning text-white rounded-circle shadow">
+                    <i class="ni ni-money-coins"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">My Active Cases</h3>
+            </div>
+            <button type="button" data-toggle="modal" data-target="#add-form" class="btn btn-secondary">Create Case</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Case Name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Raised</th>
+                <th scope="col">Progress</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for c in approved %}
+              <tr>
+                <th scope="row">
+                  {{c.title}}
+                </th>
+                <td>
+                  <span class="badge badge-success">Active</span>
+                </td>
+                <td>
+                  {{c.total_collected|add:c.total_online}} of {{c.requested_amount}}
+                </td>
+                <td>
+                  {% with test=c.proper_total|div:c.requested_amount %}
+                  <div class="d-flex align-items-center">
+                    <span class="mr-2">{{ test|mul:100|floatformat:2 }}%</span>
+                    <div>
+                      <div class="progress">
+                        <div class="progress-bar bg-primary" role="progressbar"
+                             aria-valuenow="{{c.proper_total}}" aria-valuemin="0"
+                             aria-valuemax="{{c.requested_amount}}" style="width: {{test|mul:100}}%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endwith %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Pending Cases</h3>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Case Name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Requested Amount</th>
+                <th scope="col">Submitted</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in pending %}
+              <tr>
+                <th scope="row">
+                  {{c.title}}
+                </th>
+                <td>
+                  <span class="badge badge-warning">Pending</span>
+                </td>
+                <td>
+                  {{c.requested_amount}}
+                </td>
+                <td>
+                  {{c.date_of_initiation.date}}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Rejected Cases</h3>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Case Name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Requested Amount</th>
+                <th scope="col">Date Submitted</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in rejected %}
+              <tr>
+                <th scope="row">
+                  {{c.title}}
+                </th>
+                <td>
+                  <span class="badge badge-danger">Rejected</span>
+                </td>
+                <td>
+                  {{c.requested_amount}}
+                </td>
+                <td>
+                  {{c.date_of_initiation.date}}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="add-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+              <div class="card bg-white border-0 mb-0">
+                  <div class="card-body px-lg-5 py-lg-5">
+                      <div class="text-center text-muted mb-4">
+                          <h4>Select Case Category</h4>
+                      </div>
+                      <form role="form" action="{% url 'create_case' %}">
+                          <div class="form-group mb-3">
+                              <label class="form-control-label">Case Type</label>
+                              <div class="input-group input-group-merge input-group-alternative">
+                                  <select class="form-control" name="type" required>
+                                    <option value="">----</option>
+                                    <option value="General">General</option>
+                                    <option value="Medical">Medical</option>
+                                    <option value="Medicine">Medicine</option>
+                                    <option value="Educational">Education</option>
+                                    <option value="Provisional">Provisional</option>
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="text-center">
+                              <input type="submit" class="btn btn-primary my-4" value="Next">
+                          </div>
+                      </form>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+{% endblock %}

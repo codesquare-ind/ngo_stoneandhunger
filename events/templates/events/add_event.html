@@ -1,0 +1,70 @@
+{% extends 'administration/admin_base.html' %}
+
+{% block content %}
+
+<div class="col-11 mx-auto mt-3" id="vue-form">
+  <div class="card">
+    <div class="card-header">
+      <div class="row align-items-center">
+        <div class="col-8">
+          <h3 class="mb-0">{% if edit %} Edit {% else %} Create {% endif %} Event</h3>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="pl-lg-4">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Event Title</label>
+                {{form.title}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Description</label>
+                {{form.media}}
+                {{form.description}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Location</label>
+                {{form.location}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label">Start Date</label>
+                {{form.start_date}}
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label">End Date</label>
+                {{ form.end_date }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="form-group">
+                <label class="form-control-label">Thumbnail</label>
+                {{form.thumbnail}}
+              </div>
+            </div>
+          </div>
+          <input class="btn btn-primary" value="{% if edit %} Save Changes {% else %} Submit {% endif %}" type="submit">
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

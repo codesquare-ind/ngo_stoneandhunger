@@ -1,0 +1,159 @@
+{% extends 'projects/user_dashboard_base.html' %}
+{% load mathfilters %}
+{% block content %}
+<div class="header bg-primary pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+              <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <!-- Card stats -->
+      <div class="row">
+        <div class="col-xl-6 col-md-6">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Total Raised</h5>
+                  <span class="h2 font-weight-bold mb-0">&#8377; {{ total_rec }}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                    <i class="ni ni-active-40"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 col-md-6">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Total Donated</h5>
+                  <span class="h2 font-weight-bold mb-0">&#8377; {{ total_don }}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-success text-white rounded-circle shadow">
+                    <i class="ni ni-chart-pie-35"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-7">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">My Recent Donations</h3>
+            </div>
+            <div class="col text-right">
+              <a href="{% url 'my_donations' %}" class="btn btn-sm btn-primary">See all</a>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Case name</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for d in donations|slice:":5" %}
+              <tr>
+                <th scope="row">
+                  {{d.case}}
+                </th>
+                <td>
+                  &#8377; {{ d.amount }}
+                </td>
+                <td>
+                  {{ d.date }}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-5">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">My Active Cases</h3>
+            </div>
+            <div class="col text-right">
+              <a href="{% url 'my_cases' %}" class="btn btn-sm btn-primary">See all</a>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Case Name</th>
+                <th scope="col">Raised</th>
+                <th scope="col">Target</th>
+                <th scope="col">Progress</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for c in cases|slice:":5" %}
+              <tr>
+                <th scope="row">
+                  {{ c.title }}
+                </th>
+                <td>
+                  {{ c.total_collected}}
+                </td>
+                <td>
+                  {{ c.requested_amount}}
+                </td>
+                <td>
+                  {% with test=c.total_collected|div:c.requested_amount %}
+                  <div class="d-flex align-items-center">
+                    <span class="mr-2">{{ test|mul:100|floatformat:2 }}%</span>
+                    <div>
+                      <div class="progress">
+                        <div class="progress-bar bg-primary" role="progressbar"
+                             aria-valuenow="{{case.total_collected}}" aria-valuemin="0"
+                             aria-valuemax="{{case.requested_amount}}" style="width: {{test|mul:100}}%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endwith %}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'public/base.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block title %} {{ event.title }} - iGET Events {% endblock %}
+
+
+{% block content %}
+<div class="wrapper">
+  <div class="section features-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto text-center">
+        <h4 class="display-3">Events - iGET</h4>
+      </div>
+    </div><br>
+    <div class="row">
+      <div class="col-lg-7 mb-5 py-4 px-4">
+        <div class="info pb-4 px-3">
+          {% if event.thumbnail %}
+          <img src="{{ event.thumbnail.url }}" class="rounded img-fluid">
+          {% endif %}
+          <h4 class="info-title text-uppercase text-primary">{{event.title}}</h4>
+
+          <span class="pr-2"><i class="ni ni-pin-3 text-primary pr-1"></i> {{event.location}}</span><br>
+          <span><i class="ni ni-calendar-grid-58 text-primary pr-1"></i> {{event.start_date}} - {{event.end_date}}</span>
+
+          <p class="description display-4">
+            {{ event.description|safe }}
+          </p>
+        </div>
+      </div>
+      {% if others.count > 0 %}
+      <div class="col-lg-5 mb-5 py-4 px-4">
+        <div class="info pb-4 px-3">
+          <h4>Recent Posts</h4>
+          {% for o in others %}
+          <div class="py-1 row">
+            {% if o.thumbnail %}
+            <img src="{{o.thumbnail.url}}" height="60">
+            {% endif %}
+            <div class="col-10">
+              <h6 class="text-primary"><a href="{% url 'blog_post' o.uuid %}"><b>{{ o.title }}</b></a></h6>
+              <p><b>{{ o.posted_by }}</b> {{ o.posted_on }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div><br>
+  </div>
+</div>
+
+{% endblock %}

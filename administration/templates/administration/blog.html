@@ -1,0 +1,77 @@
+{% extends 'administration/admin_base.html' %}
+
+{% block content %}
+<div class="header bg-primary pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+              <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="#">Blog</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Blog Posts</h3>
+            </div>
+            <div class="col text-right">
+              <a href="{% url 'create_blog' %}" class="btn btn-sm btn-primary">Create New Post</a>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col">Title</th>
+                <th scope="col">Published On</th>
+                <th scope="col">Author</th>
+                <th scope="col">Comments</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for b in blogs %}
+              <tr>
+                <th scope="row">
+                  <a href="{% url 'edit_blog' b.uuid %}" class="btn btn-sm btn-info">Edit</a>
+                </th>
+                <th scope="row">
+                  <a href="{% url 'del_blog' b.uuid %}" class="btn btn-sm btn-danger">Delete</a>
+                </th>
+                <td>
+                  {{ b.title }}
+                </td>
+                <td>
+                  {{ b.posted_on }}
+                </td>
+                <td>
+                  {{ b.posted_by }}
+                </td>
+                <td>
+                  {{ b.comment_set.count }}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

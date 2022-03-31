@@ -1,0 +1,34 @@
+{% extends 'public/base.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block title %} Blog - iGET {% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <div class="section features-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto text-center">
+        <h4 class="display-3">Blog - iGET</h4>
+      </div>
+    </div>
+    <br>
+    <div class="row justify-content-center">
+      {% for blog in recent_posts %}
+        <div class="col-md-4" data-aos="zoom-in-up" data-aos-duration="700">
+          <div class="info card shadow pb-4">
+            {% if blog.thumbnail %}
+            <img src="{{ blog.thumbnail.url }}" class="img-fluid">
+            {% endif %}
+            <div class="px-3">
+              <h6 class="info-title text-uppercase text-primary">{{ blog.title }}</h6>
+              <p class="description opacity-8">{{ blog.overview|striptags|safe|truncatewords:20 }}</p>
+              <a href="{% url 'blog_post' blog.uuid %}">View More</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

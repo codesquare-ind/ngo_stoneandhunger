@@ -1,0 +1,98 @@
+{% load numtowords %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice for Donation of case {{ case }}</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0.5cm;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="pl-5 pt-4 col-5">
+            <img src="{% static 'assets/img/brand/Asset 2.png' %}" style="width: 200px;">
+            <h1 class="text-lg" style="margin-left: 23px; font-weight: bold;">Information for Guidance<br>and Education Trust</h1>
+            <p class="text-sm pt-3" style="font-weight: bold; margin-left: 23px; margin-top: -20px;">
+                #43/11, 3rd Cross, Dr. Sheshadri Road,<br>Marappa Garden, Benson Town Post,<br>
+                Bengalore - 560046, Karnataka, India<br>
+                Contact: +91 98860 20345<br>
+                Email: igetbengalore@gmail.com<br>
+                <span class="pt-3">www.igetcenter.com</span><br>
+            </p>
+            <h4 style="color: #bfa449; font-weight: bold; margin-left: 23px">For Charity (Sadaqah and Zakaah)</h4>
+            <p class="text-sm" style="font-weight: bold; margin-left: 23px">
+                Current Account: 918020001955932<br>
+                Axis Bank...IFSC Code UTIB0003079
+            </p>
+            <h4 style="color: #bfa449; font-weight: bold; margin-left: 23px">For General Charity/Donation</h4>
+            <p class="text-sm" style="font-weight: bold; margin-left: 23px">
+                Current Account: 917020084380158<br>
+                Axis Bank...IFSC Code UTIB0003079
+            </p>
+        </div>
+        <div class="col-7">
+            <div class="py-1 row" style="transform: translateX(70px); margin-top: 20px; border-right: 20px solid #bfa449;">
+                <div class="col">
+                    <b class="text-primary">
+                        80G AABTI5274KF20215<br>
+                        12A AABTI5274KF20217
+                    </b>
+                </div>
+                <h1 class="col text-right pr-2">RECEIPT</h1>
+            </div>
+            <div class="pl-5 row mt-4">
+                <div class="col-5" style="border: 1px solid black; padding: 13px 20px;">
+                    <span class="text-xl"><b style="color: #bfa449">NO.</b> {{ donation.id|stringformat:"04d" }}</span>
+                </div>
+                <div class="col-7 text-center" style="transform: translateX(115px); border: 1px solid black; padding: 13px 20px;">
+                    <span class="text-md"><b>DATE</b></span><br>
+                    <span class="text-md">{{ donation.date.date }}</span>
+                </div>
+            </div>
+            <h1 style="color: #bfa449; transform: translateX(45px);" class="text-center pt-2">Thank You For Your Contribution</h1>
+            <div class="col-12" style="transform: translateX(33px); border: 1px solid black;">
+                <div style="padding: 13px 60px 13px 20px;">
+                    <span class="text-md"><b>NAME</b></span><br>
+                    <span class="text-md">{{ donation.full_name }}</span>
+                </div>
+            </div>
+            <div class="col-12 my-2" style="transform: translateX(33px); border: 1px solid black;">
+                <div style="padding: 13px 60px 13px 20px;">
+                        <span class="text-md"><b>SUM OF RUPEES</b></span><br>
+                    <span class="text-md" style="text-transform: uppercase;">{{ donation.amount|numtowords }} ONLY</span>
+                </div>
+            </div>
+            <div class="col-12 my-2" style="transform: translateX(33px); border: 1px solid black;">
+                <div style="padding: 13px 60px 13px 20px;">
+                    <span class="text-md"><b>TOWARDS</b></span><br>
+                    {% if donation.case == None %}
+                        <span class="text-md">iGET {{ donation.category }} Donation</span>
+                    {% else %}
+                        <span class="text-md">{{ donation.case }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12 my-2" style="transform: translateX(33px); border: 1px solid black;">
+                <div style="padding: 13px 60px 13px 20px;">
+                    <span class="text-md"><b>BY CASH/CHEQUE/TRANSFER</b></span><br>
+                    <span class="text-md">{{ donation.transaction_id }}</span>
+                </div>
+            </div>
+            <div class="pl-5 row my-2">
+                <div class="col-5" style="border: 1px solid black; padding: 13px 17px;">
+                    <span class="display-2">&#8377</span><span class="display-4 pl-3">{{donation.amount}}/-</span>
+                </div>
+                <div class="col-7">
+                    <h3>We Appreciate Your Support</h3>
+                </div>
+            </div>
+            <h4 class="text-right">AUTHORISED SIGNATORY</h4>
+        </div>
+    </div>
+</body>
+</html>

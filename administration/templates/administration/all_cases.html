@@ -1,0 +1,464 @@
+{% extends 'administration/admin_base.html' %}
+{% load static %}
+{% block content %}
+<div class="header bg-primary pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+              <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="#">Cases</a></li>
+            </ol>
+          </nav>
+        </div>
+        <div class="col-lg-6 col-5 text-right">
+          <button class="btn btn-icon btn-success" type="button" data-toggle="modal" data-target="#filter-form">
+            <span class="btn-inner--icon"><i class="fa fa-filter"></i></span>
+            <span class="btn-inner--text">Filter</span>
+          </button>
+          <button class="btn btn-icon btn-secondary" type="button" data-toggle="modal" data-target="#add-form">
+            <span class="btn-inner--icon"><i class="fa fa-plus"></i></span>
+            <span class="btn-inner--text">New Case</span>
+          </button>
+          <button class="btn btn-icon btn-info" type="button" data-toggle="modal" data-target="#sort-form">
+            <span class="btn-inner--icon"><i class="ni ni-bullet-list-67"></i></span>
+            <span class="btn-inner--text">Sort</span>
+          </button>
+        </div>
+      </div>
+      <!-- Card stats -->
+      <div class="row">
+        <div class="col-xl-4 col-md-4">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Total Active Cases</h5>
+                  <span class="h2 font-weight-bold mb-0">{{a_count}}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                    <i class="ni ni-active-40"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-md-4">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Pending Approval</h5>
+                  <span class="h2 font-weight-bold mb-0">{{p_count}}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-success text-white rounded-circle shadow">
+                    <i class="ni ni-chart-pie-35"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-md-4">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Cases Closed</h5>
+                  <span class="h2 font-weight-bold mb-0">{{r_count}}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-warning text-white rounded-circle shadow">
+                    <i class="ni ni-chart-pie-35"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Pending Cases</h3>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Thumbnail</th>
+                <th scope="col">Case Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Requested Amount</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for case in pending_cases %}
+              <tr>
+                <th scope="row">
+                  {% if case.thumbnail %}
+                  <img src="{{ case.thumbnail.url }}" class="img-thumbnail" height="50" width="50">
+                  {% else %}
+                  <img src="{% static 'assets/img/default-thumbnail.jpg' %}" class="img-thumbnail" height="50" width="50">
+                  {% endif %}
+                </th>
+                <th scope="row">
+                  <a href="{% url 'a_case_details' case.uuid %}">{{case.title}}</a>
+                </th>
+                <td>
+                  {{case.type}}
+                </td>
+                <td>
+                  {{case.requested_amount}}
+                </td>
+                <td>
+                  {{case.date_of_initiation.date}}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Active Cases</h3>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Thumbnail</th>
+                <th scope="col">Case Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Collected</th>
+                <th scope="col">Target Amount</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for case in active_cases %}
+              <tr>
+                <th scope="row">
+                  <button class="btn btn-sm btn-success" type="button" data-toggle="modal" data-target="#close-form{{case.id}}">Close Case</button>
+                  <div class="modal fade" id="close-form{{case.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+                    <div class="modal-dialog modal- modal-dialog-centered modal-sm" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body p-0">
+                              <div class="card bg-white border-0 mb-0">
+                                  <div class="card-body px-lg-5 py-lg-5">
+                                      <div class="text-center text-muted mb-4">
+                                          <h4>Close Case: {{ case.title }}</h4>
+                                      </div>
+                                      <form role="form" method="POST" action="{% url 'a_close' case.uuid %}" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                          <div class="form-group mb-3">
+                                              <label class="form-control-label" for="case_type">Closing Documents (Optional)</label>
+                                              <div class="input-group input-group-merge input-group-alternative">
+                                                  <input type="file" class="form-control" name="c_docs" multiple>
+                                              </div>
+                                          </div>
+                                          <div class="text-center">
+                                              <input type="submit" class="btn btn-primary my-4" value="Close Case">
+                                          </div>
+                                      </form>
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </th>
+                <th scope="row">
+                  {% if case.thumbnail %}
+                  <img src="{{ case.thumbnail.url }}" class="img-thumbnail" height="50" width="50">
+                  {% else %}
+                  <img src="{% static 'assets/img/default-thumbnail.jpg' %}" class="img-thumbnail" height="50" width="50">
+                  {% endif %}
+                </th>
+                <th scope="row">
+                  <a href="{% url 'a_case_details' case.uuid %}">{{case.title}}</a>
+                </th>
+                <td>
+                  {{case.type}}
+                </td>
+                <td>
+                  {{case.proper_total}}
+                </td>
+                <td>
+                  {{case.requested_amount}}
+                </td>
+                <td>
+                  {{case.date_of_initiation.date}}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Rejected Cases</h3>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                {% if request.user.get_group != 'subadmin' %}
+                <th scope="col"></th>
+                {% endif %}
+                <th scope="col">Thumbnail</th>
+                <th scope="col">Case Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Target Amount</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for case in rejected_cases %}
+              <tr>
+                {% if request.user.get_group != 'subadmin' %}
+                <th scope="row">
+                  <a href="{% url 'a_delete' case.uuid %}" class="btn btn-sm btn-danger">Delete</a>
+                </th>
+                {% endif %}
+                <th scope="row">
+                  {% if case.thumbnail %}
+                  <img src="{{ case.thumbnail.url }}" class="img-thumbnail" height="50" width="50">
+                  {% else %}
+                  <img src="{% static 'assets/img/default-thumbnail.jpg' %}" class="img-thumbnail" height="50" width="50">
+                  {% endif %}
+                </th>
+                <th scope="row">
+                  <a href="{% url 'a_case_details' case.uuid %}">{{case.title}}</a>
+                </th>
+                <td>
+                  {{case.type}}
+                </td>
+                <td>
+                  {{case.requested_amount}}
+                </td>
+                <td>
+                  {{case.date_of_initiation.date}}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Closed Cases</h3>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col"></th>
+                {% if request.user.get_group != 'subadmin' %}
+                <th scope="col"></th>
+                {% endif %}
+                <th scope="col">Thumbnail</th>
+                <th scope="col">Case Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Total Collected</th>
+                <th scope="col">Target</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for case in closed_cases %}
+              <tr>
+                <th scope="row">
+                  <a href="{% url 'a_case_details' case.uuid %}" class="btn btn-sm btn-info">Details</a>
+                </th>
+                {% if request.user.get_group != 'subadmin' %}
+                <th scope="row">
+                  <a href="{% url 'a_delete' case.uuid %}" class="btn btn-sm btn-danger">Delete</a>
+                </th>
+                {% endif %}
+                <th scope="row">
+                  {% if case.thumbnail %}
+                  <img src="{{ case.thumbnail.url }}" class="img-thumbnail" height="50" width="50">
+                  {% else %}
+                  <img src="{% static 'assets/img/default-thumbnail.jpg' %}" class="img-thumbnail" height="50" width="50">
+                  {% endif %}
+                </th>
+                <th scope="row">
+                  <a href="{% url 'a_case_details' case.uuid %}">{{case.title}}</a>
+                </th>
+                <td>
+                  {{case.type}}
+                </td>
+                <td>
+                  {{case.proper_total}}
+                </td>
+                <td>
+                  {{case.requested_amount}}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="filter-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+              <div class="card bg-white border-0 mb-0">
+                  <div class="card-body px-lg-5 py-lg-5">
+                      <div class="text-center text-muted mb-4">
+                          <h4>Filter Cases</h4>
+                      </div>
+                      <form role="form">
+                          <div class="form-group mb-3">
+                              <label class="form-control-label" for="case_type">Case Type</label>
+                              <div class="input-group input-group-merge input-group-alternative">
+                                  <select class="form-control" name="type" id="case_type">
+                                    <option value="">----</option>
+                                    <option value="General">General</option>
+                                    <option value="Medical">Medical</option>
+                                    <option value="Medicine">Medicine</option>
+                                    <option value="Educational">Education</option>
+                                    <option value="Provisional">Provisional</option>
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="text-center">
+                              <input type="submit" class="btn btn-primary my-4" value="Filter">
+                          </div>
+                      </form>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="sort-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+              <div class="card bg-white border-0 mb-0">
+                  <div class="card-body px-lg-5 py-lg-5">
+                      <div class="text-center text-muted mb-4">
+                          <h4>Sort By</h4>
+                      </div>
+                      <form role="form">
+                          <div class="form-group mb-3">
+                              <label class="form-control-label" for="case_type">Sort By</label>
+                              <div class="input-group input-group-merge input-group-alternative">
+                                  <select class="form-control" name="sort" id="sort_by">
+                                    <option value="">----</option>
+                                    <option value="date_of_initiation-d">Oldest To Newest</option>
+                                    <option value="date_of_initiation-a">Newest To Oldest</option>
+                                    <option value="priority-d">Priority</option>
+                                    <option value="priority-a">Priority Ascending</option>
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="text-center">
+                              <input type="submit" class="btn btn-primary my-4" value="Sort">
+                          </div>
+                      </form>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="add-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+              <div class="card bg-white border-0 mb-0">
+                  <div class="card-body px-lg-5 py-lg-5">
+                      <div class="text-center text-muted mb-4">
+                          <h4>Select Case Category</h4>
+                      </div>
+                      <form role="form" action="{% url 'a_add' %}">
+                          <div class="form-group mb-3">
+                              <label class="form-control-label" for="case_type">Case Type</label>
+                              <div class="input-group input-group-merge input-group-alternative">
+                                  <select class="form-control" name="type" required>
+                                    <option value="">----</option>
+                                    <option value="General">General</option>
+                                    <option value="Medical">Medical</option>
+                                    <option value="Medicine">Medicine</option>
+                                    <option value="Educational">Education</option>
+                                    <option value="Provisional">Provisional</option>
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="text-center">
+                              <input type="submit" class="btn btn-primary my-4" value="Next">
+                          </div>
+                      </form>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+{% endblock %}

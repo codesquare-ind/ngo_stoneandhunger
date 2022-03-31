@@ -1,0 +1,228 @@
+{% extends 'public/base.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block title %} All Active Cases - iGET {% endblock %}
+
+
+{% block content %}
+<div class="wrapper">
+  <div class="section features-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto text-center">
+        <h4 class="display-3">All Active Cases {% if request.GET.type != '' %} - {{request.GET.type}} {% endif %} ({{all_cases.count}})</h4>
+      </div>
+    </div><br>
+    <form class="row justify-content-between">
+        <div class="col-lg-4 col-md-6">
+            <label><b>Filter By Category</b></label>
+            <select class="form-control" name="type">
+                <option value="{{ request.GET.type }}">{{ request.GET.type|default:"---" }}</option>
+                <option value="General">General</option>
+                <option value="Medical">Medical</option>
+                <option value="Medicine">Medicine</option>
+                <option value="Educational">Education</option>
+                <option value="Provisional">Provisional</option>
+            </select>
+            <input type="submit" class="btn btn-primary" value="Go">
+        </div>
+        <div class="col-lg-4 col-md-5 mt-4">
+            <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#exampleModalLong">Make a General Donation</button>
+        </div>
+    </form>
+    <br>
+    <div class="row justify-content-center">
+      {% for case in all_cases %}
+        <div class="col-md-4" data-aos="zoom-in-up" data-aos-duration="700">
+          <span class="badge badge-secondary badge-pill mb-3 text-white">{{case.type}}</span>
+          <div class="info card shadow pb-4 px-3">
+            {% if case.thumbnail %}
+            <img src="{{ case.thumbnail.url }}" height="180">
+            {% else %}
+                <img src="{% static 'assets/img/default-thumbnail.jpg' %}" height="180">
+            {% endif %}
+            <h6 class="info-title text-uppercase text-primary">{{case.title}}</h6>
+            <p class="description opacity-8">{{case.description|safe|truncatewords:25}}</p>
+            <div class="progress-wrapper">
+              <div class="progress-info">
+                <div class="progress-label">
+                  <h6>Raised &#8377;{{case.proper_total}} of &#8377;{{case.requested_amount}}</h6>
+                </div>
+                {% with test=case.proper_total|div:case.requested_amount %}
+                <div class="progress-percentage">
+                  <span>{{ test|mul:100|floatformat:2 }}%</span>
+                </div>
+              </div>
+              <div class="progress">
+                <div class="progress-bar bg-secondary" role="progressbar"
+                     aria-valuenow="{{case.proper_total}}" aria-valuemin="0"
+                     aria-valuemax="{{case.requested_amount}}" style="width: {{test|mul:100}}%;"></div>
+              </div>
+                {% endwith %}
+            </div>
+
+            <a href="{% url 'case_details' case.uuid %}" class="my-3 btn rounded-pill btn-outline-primary">View More</a>
+            {% if case.status == 'Green' %}
+              <button class="btn rounded-pill btn-primary" style="transition: 0.25s ease-in-out" data-toggle="modal" data-target="#exampleModalLong{{case.id}}">Donate</button>
+            {% else %}
+              <b class="text-center">Sorry, this case is closed</b>
+            {% endif %}
+          </div>
+        </div>
+
+        <div x-data="{ amount: 0}" class="modal fade" id="exampleModalLong{{case.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle{{case.id}}">Donation To {{case.title}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form method="post" action="{% url 'checkout' case.id %}">
+                    <input type="text" value="{{ case.type }}" hidden name="type">
+                    {% if request.user.is_authenticated %}
+                    <label>Enter Amount</label>
+                    <input x-model="amount" class="form-control" name="amount" type="text" placeholder="Enter Amount (&#8377;)" required><br>
+                    <label>PAN No.</label>
+                    <input class="form-control mb-2" name="pan" type="text" placeholder="PAN No." :required="amount > 4999">
+                    <p>PAN Number is Mandatory for donations above &#8377;5000/- to issue 80G and 12A receipt.</p>
+                    <template x-if="amount > 4999">
+                        <p>For the donation above &#8377;5000/- PAN number of individual/company/institution is mandatory as per income tax department</p>
+                    </template>
+
+                      {% if request.user.userprofile_set.all.first %}
+                        <input type="submit" value="Donate" class="btn btn-primary">
+                      {% else %}
+                        <a href="{% url 'complete_profile' %}" class="btn btn-primary">Donate</a>
+                      {% endif %}
+
+                    {% else %}
+                      <label>First Name</label>
+                      <input class="form-control mb-2" name="first_name" type="text" placeholder="John" required>
+
+                      <label>Last Name</label>
+                      <input class="form-control mb-2" name="last_name" type="text" placeholder="Doe" required>
+
+                      <label>Gender</label>
+                      <select class="form-control mb-2" name="gender" required>
+                        <option value="" selected>----</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </select>
+
+                      <label>PAN No.</label>
+                      <input class="form-control mb-2" name="pan" type="text" placeholder="PAN No." :required="amount > 4999">
+                      <p>PAN Number is Mandatory for donations above &#8377;5000/- to issue 80G and 12A receipt.</p>
+                      <template x-if="amount > 4999">
+                          <p>For the donation above &#8377;5000/- PAN number of individual/company/institution is mandatory as per income tax department</p>
+                      </template>
+
+                      <label>Address</label>
+                      <input class="form-control mb-2" name="address" type="text" placeholder="Address" required>
+
+                      <label>City</label>
+                      <input class="form-control mb-2" name="city" type="text" placeholder="City" required>
+                      <label>State</label>
+                      <input class="form-control mb-2" name="state" type="text" placeholder="State" required>
+                      <label>Country</label>
+                      <input class="form-control mb-2" name="country" type="text" placeholder="Country" required>
+
+                      <label>Phone Number</label>
+                      <input class="form-control mb-2" name="phone" type="tel" placeholder="Phone Number" required>
+
+                      <label>Email</label>
+                      <input class="form-control mb-2" name="email" type="email" placeholder="john@mail.com" required>
+
+                      <label>Enter Amount</label>
+                      <input x-model="amount" class="form-control" name="amount" type="text" placeholder="Enter Amount (&#8377;)" required><br>
+
+                      <input type="submit" value="Donate" class="btn btn-primary">
+                    {% endif %}
+                  </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div x-data="{ amount: 0 }" class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Make A Donation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{% url 'checkout' ' ' %}">
+            <input type="text" value="{{ request.GET.type|default:'General' }}" hidden name="type">
+            {% if request.user.is_authenticated %}
+            <label>Enter Amount</label>
+            <input x-model="amount" class="form-control" name="amount" type="text" placeholder="Enter Amount (&#8377;)" required><br>
+            <label>PAN No.</label>
+            <input class="form-control mb-2" name="pan" type="text" placeholder="PAN No." :required="amount > 4999">
+            <p>PAN Number is Mandatory for donations above &#8377;5000/- to issue 80G and 12A receipt.</p>
+            <template x-if="amount > 4999">
+                <p>For the donation above &#8377;5000/- PAN number of individual/company/institution is mandatory as per income tax department</p>
+            </template>
+
+              {% if request.user.userprofile_set.all.first %}
+                <input type="submit" value="Donate" class="btn btn-primary">
+              {% else %}
+                <a href="{% url 'complete_profile' %}" class="btn btn-primary">Donate</a>
+              {% endif %}
+
+            {% else %}
+              <label>First Name</label>
+              <input class="form-control mb-2" name="first_name" type="text" placeholder="John" required>
+
+              <label>Last Name</label>
+              <input class="form-control mb-2" name="last_name" type="text" placeholder="Doe" required>
+
+              <label>Gender</label>
+              <select class="form-control mb-2" name="gender" required>
+                <option value="" selected>----</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+
+              <label>PAN No.</label>
+              <input class="form-control mb-2" name="pan" type="text" placeholder="PAN No." :required="amount > 4999">
+              <p>PAN Number is Mandatory for donations above &#8377;5000/- to issue 80G and 12A receipt.</p>
+              <template x-if="amount > 4999">
+                  <p>For the donation above &#8377;5000/- PAN number of individual/company/institution is mandatory as per income tax department</p>
+              </template>
+
+              <label>Address</label>
+              <input class="form-control mb-2" name="address" type="text" placeholder="Address" required>
+
+              <label>City</label>
+              <input class="form-control mb-2" name="city" type="text" placeholder="City" required>
+              <label>State</label>
+              <input class="form-control mb-2" name="state" type="text" placeholder="State" required>
+              <label>Country</label>
+              <input class="form-control mb-2" name="country" type="text" placeholder="Country" required>
+
+              <label>Phone Number</label>
+              <input class="form-control mb-2" name="phone" type="tel" placeholder="Phone Number" required>
+
+              <label>Email</label>
+              <input class="form-control mb-2" name="email" type="email" placeholder="john@mail.com" required>
+
+              <label>Enter Amount</label>
+              <input x-model="amount" class="form-control" name="amount" type="text" placeholder="Enter Amount (&#8377;)" required><br>
+
+              <input type="submit" value="Donate" class="btn btn-primary">
+            {% endif %}
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

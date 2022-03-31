@@ -1,0 +1,335 @@
+{% extends 'administration/admin_base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="col-11 mx-auto mt-3" id="vue-form">
+  <div class="card">
+    <div class="card-header">
+      <div class="row align-items-center">
+        <div class="col-8">
+          <h3 class="mb-0">{% if edit %} Edit Case {% else %} Add Case {% endif %}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      {% for m in messages %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+          <span class="alert-text">{{m}}</span>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      {% endfor %}
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="pl-lg-4">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label required">Case Title <span class="text-danger">*</span></label>
+                {{form.title}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            {% if edit %}
+              <div class="col-2">
+                {% if case.thumbnail %}
+                <img src="{{ case.thumbnail.url }}" class="img-thumbnail img-fluid">
+                {% else %}
+                <img src="{% static 'assets/img/default-thumbnail.jpg' %}" class="img-thumbnail img-fluid">
+                {% endif %}
+              </div>
+            {% endif %}
+            <div class="{% if edit %} col-lg-10 {% else %} col-lg-12 {% endif %}">
+              <div class="form-group">
+                <label class="form-control-label">Case Thumbnail</label>
+                {{form.thumbnail}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Description <span class="text-danger">*</span></label>
+                {{form.media}}
+                {{form.description}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="form-group">
+                <label class="form-control-label" for="case_type">Case Type <span class="text-danger">*</span></label>
+                <select class="form-control" name="category" id="case_type">
+                  <option value="{{type}}" selected>{{type}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="form-group">
+                <label class="form-control-label">Amount Requested <span class="text-danger">*</span></label>
+                {{form.requested_amount}}
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="form-group">
+                <label class="form-control-label">Total Collected</label>
+                {{form.total_collected}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Financial Aid From Other Places</label>
+                {{form.other_financial_assistance}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="my-4">
+
+<!--   education form-->
+        {% if type == 'Educational' %}
+        <div class="pl-lg-4">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="form-group">
+                <label class="form-control-label">Name of Institution <span class="text-danger">*</span></label>
+                {{form.name_of_school}}
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <div class="form-group">
+                <label class="form-control-label">Address of Institution <span class="text-danger">*</span></label>
+                {{form.location_of_school}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="is_orphan" id="orphan"
+                         value="{% if case %} {{case.is_orphan}} {% endif %}">
+                  <label class="custom-control-label" for="orphan">Is Orphan ? </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label">Death Certificate</label>
+                {{form.death_cert}}
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Institution Fee Structure</label>
+                {{form.fee_structure}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-3">
+              <div class="form-group">
+                <label class="form-control-label">Grade <span class="text-danger">*</span></label>
+                {{form.grade}}
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label">Guardian <span class="text-danger">*</span></label>
+                {{form.guardian}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--general form-->
+        {% elif type == 'General' %}
+        <div class="pl-lg-4">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="custom-file">
+                    <label class="form-control-label">Nature Of Aid <span class="text-danger">*</span></label>
+                    {{form.nature_of_aid}}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="custom-file">
+                    <label class="form-control-label">Estimated Cost Certificate</label>
+                    {{form.estimated_cost_cert}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Medical form-->
+        {% elif type == 'Medical' %}
+        <div class="pl-lg-4">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-control-label">Nature Of Disease <span class="text-danger">*</span></label>
+                {{form.nature_of_disease}}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-control-label">Name of Hospital <span class="text-danger">*</span></label>
+                {{form.name_of_hospital}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  {{form.admitted_in_hospital}}
+                  <label class="custom-control-label" for="admitted_hos">Patient Admitted in Hospital ?</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-9">
+              <div class="form-group">
+                <label class="form-control-label">Estimation Letter</label>
+                {{form.estimation_letter}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--prov form-->
+        {% elif type == 'Provisional' %}
+        <div class="pl-lg-4">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="form-group">
+                  <label class="form-control-label">Marital Status <span class="text-danger">*</span></label>
+                  {{form.marital_status}}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="form-group">
+                  <label class="form-control-label">Death Certificate (Applicable only if widow)</label>
+                  {{form.death_cert}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--medicine form-->
+        {% elif type == 'Medicine' %}
+        <div class="pl-lg-4">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="form-control-label">Nature Of Disease <span class="text-danger">*</span></label>
+                {{form.nature_of_disease}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <div class="form-group">
+                <label class="form-control-label">Name of Medicine <span class="text-danger">*</span></label>
+                {{form.name_of_medicine}}
+              </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="form-control-label">Name of Hospital <span class="text-danger">*</span></label>
+                {{form.name_of_hospital}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  {{form.admitted_in_hospital}}
+                  <label class="custom-control-label" for="admitted_hos1">Patient Admitted in Hospital ?</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-9">
+              <div class="form-group">
+                <label class="form-control-label">Estimation Letter</label>
+                {{form.estimation_letter}}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        <hr class="my-4">
+
+        <div class="pl-lg-4">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="form-group">
+                  <label class="form-control-label">Category</label>
+                  {{form.status}}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="form-group">
+                  <label class="form-control-label">Priority</label>
+                  {{form.priority}}
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="form-group mb-3 col-6">
+              <label class="form-control-label" for="case_type">Additional Images (Optional)</label>
+              <div class="input-group input-group-merge input-group-alternative">
+                  <input type="file" class="form-control" name="e_imgs" multiple>
+              </div>
+          </div>
+          <div class="form-group mb-3 col-6">
+              <label class="form-control-label" for="case_type">Additional Documents (Optional)</label>
+              <div class="input-group input-group-merge input-group-alternative">
+                  <input type="file" class="form-control" name="e_docs" multiple>
+              </div>
+          </div>
+        </div>
+
+          <input class="btn btn-primary" value="{% if edit %} Save Changes {% else %} Submit {% endif %}" type="submit">
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+const PostCaseForm = {
+  delimiters: [ '[[', ']]'],
+  data() {
+    return {
+      type: '',
+      is_orphan: null,
+      est_letter: null,
+      admitted_hos: null,
+      est_letter_med: null,
+      marital: ''
+    }
+  }
+}
+Vue.createApp(PostCaseForm).mount('#vue-form')
+</script>
+{% endblock %}

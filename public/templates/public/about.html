@@ -1,0 +1,157 @@
+{% extends 'public/base.html' %}
+{% load static %}
+{% block title %} About Us - iGET {% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <div class="section section-hero section-shaped"
+       style="background: linear-gradient(0deg, rgba(29, 42, 99, 0.8), rgba(29, 42, 99, 0.8)), url('../static/assets/img/brand/hungry-children-being-fed-by-charity-min.jpg') no-repeat center center fixed;
+              background-size: cover;">
+    <div class="page-header">
+      <div class="container shape-container d-flex align-items-center py-lg">
+        <div class="col px-0">
+          <div class="row align-items-center justify-content-center">
+            <div class="col-lg-6 text-center">
+              <h1 class="text-white display-1" data-aos="fade-up" data-aos-duration="700">
+                <img src="{% static 'assets/img/brand/Asset 3.png' %}" style="width: 25px; height: auto;">
+                About Us - iGET
+              </h1>
+              <h2 class="display-4 font-weight-normal text-white" data-aos="fade-up" data-aos-duration="900">Learn more about us and our mission</h2>
+              <div class="btn-wrapper mt-4" data-aos="fade-up" data-aos-duration="1200">
+                <a href="{% url 'all_cases' %}" class="btn btn-secondary rounded-pill mt-3 mb-sm-0">
+                  <span class="btn-inner--text">View Causes</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="separator separator-bottom separator-skew zindex-100">
+      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+      </svg>
+    </div>
+  </div>
+  <div class="section features-6">
+    <div class="container mx-auto">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-lg-10 mx-auto" data-aos="zoom-in-up" data-aos-duration="900">
+          <div class="info info-horizontal info-hover-primary">
+            <div class="description pl-4">
+              <h4 class="title display-3 text-center text-primary" style="border-bottom: 2px solid #bfa449;">
+                <img src="{% static 'assets/img/brand/Asset 3.png' %}" style="width: 25px; height: auto;">
+                About the NGO
+              </h4>
+              <p>
+                <b>The Information for Guidance and Education Trust (iGET)</b>
+                is a non-profit public charitable organization established with the idea of promoting peace, inculcating socio-religious tolerance among the people to foster unity and brotherhood and lastly, to help the poor, especially in the fields of education and healthcare.<br />
+                Our team works relentlessly in identifying the deserving people who require financial help to attain a sustainable livelihood. We also do a complete screening of our beneficiaries so that the efforts of our benefactors do not end up in the hands of the undeserving.<br />
+                We are financed solely through fundraising and receive no government or institutional funding.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section features-6 bg-primary border-secondary">
+    <div class="container">
+      <div class="info info-horizontal info-hover-primary">
+        <div class="description pl-4" data-aos="fade-down" data-aos-duration="800">
+          <h3 class="title text-white text-center">Our Vision</h3>
+          <h6 class="text-center opacity-8 text-white">To make a difference in the lives of people by promoting peace and charity</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section features-6 border-secondary">
+    <div class="container">
+      <div class="row">
+        <div class="info info-horizontal info-hover-primary mt-3 col-lg-7 mx-auto" data-aos="fade-right" data-aos-duration="1200">
+          <div class="description pl-4">
+            <h5 class="title display-4 text-primary">Our Aims &amp; Objectives</h5>
+            <ol class="c-bullet">
+              <li class="pb-2 paragraph">To promote peace and social harmony among the masses and instill the feeling of universal brotherhood.</li>
+              <li class="pb-2 paragraph">Offer scholarships to needy and deserving students.</li>
+              <li class="pb-2 paragraph">Establish educational institutions to serve masses</li>
+              <li class="pb-2 paragraph">Conduct social service programmes for society's betterment like distribution of food packets, blankets and clothes to homeless.</li>
+              <li class="pb-2 paragraph">Respond to the needs of orphans by providing them career assistance and social guidance.</li>
+              <li class="pb-2 paragraph">To equip youths and fresh graduates with soft skills that help them find the job of their choice.</li>
+              <li class="pb-2 paragraph">To help single-mothers and widows become self-reliant.</li>
+              <li class="pb-2 paragraph">Organise meetings, lectures, discussions, seminars, symposiums, competitions and debates on social and environmental issues.</li>
+            </ol>
+          </div>
+        </div>
+        <div class="col-lg-5 col-10 pt-5 mx-auto" data-aos="zoom-in-left" data-aos-duration="1100">
+            <img class="ml-lg-5" src="{% static 'assets/img/brand/adult-child-hands-holding-heart-min.jpg' %}" width="100%">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section features-6 bg-secondary">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-3 col-md-6 mb-4" data-aos="zoom-in-up" data-aos-duration="600">
+          <div class="info info-horizontal info-hover-primary">
+            <div class="description pl-4 text-center">
+              <img src="{% static 'assets/img/education.png' %}" width="60px">
+              <h3 class="title text-white text-center">&#8377;9.5 Lakhs</h3>
+              <h6 class="text-center opacity-9 text-white">Scholarships worth 9.5 Lakhs</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4"  data-aos="zoom-in-up" data-aos-duration="700">
+          <div class="info info-horizontal info-hover-primary">
+            <div class="description pl-4 text-center">
+              <img src="{% static 'assets/img/stethoscope.png' %}" width="60px">
+              <h3 class="title text-white text-center">&#8377;13 Lakhs</h3>
+              <h6 class="text-center opacity-9 text-white">Medical help worth 13 Lakhs</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4" data-aos="zoom-in-up" data-aos-duration="800">
+          <div class="info info-horizontal info-hover-primary">
+            <div class="description pl-4 text-center">
+              <img src="{% static 'assets/img/emergency.png' %}" width="60px">
+              <h3 class="title text-white text-center">&#8377;13.25 Lakhs</h3>
+              <h6 class="text-center opacity-9 text-white">Amphan Relief Fund worth 13.25 Lakhs</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4" data-aos="zoom-in-up" data-aos-duration="900">
+          <div class="info info-horizontal info-hover-primary">
+            <div class="description pl-4 text-center">
+              <img src="{% static 'assets/img/virus.png' %}" width="60px">
+              <h3 class="title text-white text-center">&#8377;12 Lakhs</h3>
+              <h6 class="text-center opacity-9 text-white">Covid-19 Relief Fund worth 12 Lakhs</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section features-6">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 col-10 mx-auto" data-aos="zoom-in-right" data-aos-duration="900">
+          <img class="ml-lg-4" src="{% static 'assets/img/brand/10188-min.jpg' %}" width="100%">
+        </div>
+        <div class="col-lg-6">
+          <div class="info info-horizontal info-hover-primary mt-3">
+            <div class="description pl-4" data-aos="fade-left" data-aos-duration="800">
+              <h4 class="title display-4 text-primary">Projects In Pipeline</h4>
+              <ul class="c-bullets">
+                <li class="pb-2 paragraph">Organising blood donation, eye check-up, dental check-up and other routine medical health check-up camps in colonies of poor.</li>
+                <li class="pb-2 paragraph">Launch an ambulance service for the needy.</li>
+                <li class="pb-2 paragraph">Set up women-only maternity homes.</li>
+                <li class="pb-2 paragraph">Organise cleanliness drives.</li>
+                <li class="pb-2 paragraph">Set up coaching classes for poor students studying in class 10 and class 12.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}

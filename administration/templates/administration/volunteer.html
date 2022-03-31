@@ -1,0 +1,101 @@
+{% extends 'administration/admin_base.html' %}
+
+{% block content %}
+<div class="header bg-primary pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+              <li class="breadcrumb-item"><a href="#">Volunteer</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Volunteer Applications</h3>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col">Status</th>
+                <th scope="col">Submitted By</th>
+                <th scope="col">Submission Date</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            {% for v in applications %}
+              <tr>
+                <th scope="row">
+                  <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#exampleModal{{s.id}}">View</button>
+                    <div class="modal fade" id="exampleModal{{s.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content bg-grey">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Application Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                              <h3>Name: {{ v.name }}</h3>
+                              <h3>Email: {{ v.email }}</h3>
+                              <h3>Phone: {{ v.phone }}</h3>
+                              <h3>Gender: {{ v.gender }}</h3>
+                              <h3>Date of birth: {{ v.date_of_birth }}</h3>
+                              <h3>Address: {{ v.address }}</h3>
+                              <h3>Occupation: {{ v.occupation }}</h3>
+                              <h3>Way of Contribution: {{ v.way_of_contribution }}</h3>
+                              <h3>Hours/Day: {{ v.hours_per_day }}</h3>
+                              <h3>Application Date: {{ v.application_date }}</h3><br>
+                              <a href="{% url 'v_accept' v.id %}" class="btn btn-success">Approve</a>
+                              <a href="{% url 'v_reject' v.id %}" class="btn btn-warning">Reject</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </th>
+                <th scope="row">
+                  <a href="{% url 'v_del' v.id %}" class="btn btn-sm btn-danger">Delete</a>
+                </th>
+                <th scope="row">
+                  <span class="badge
+                    {% if v.status == 'Accepted' %} badge-success
+                    {% elif v.status == 'Pending' %} badge-warning
+                    {% elif v.status == 'Rejected' %} badge-danger {% endif %}
+                    ">{{ v.status }}
+                  </span>
+                </th>
+                <td>
+                    {{v.name}}
+                </td>
+                <td>
+                    {{v.application_date}}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

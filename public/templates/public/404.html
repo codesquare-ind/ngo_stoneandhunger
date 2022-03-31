@@ -1,0 +1,21 @@
+{% extends 'public/base.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block title %} 404 Error - Page Not Found {% endblock %}
+
+
+{% block content %}
+<div class="wrapper">
+  <div class="section features-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto text-center">
+        <h3 class="display-3">404 Error</h3>
+        <h4>Sorry, but this page does not exist. Maybe take a look at <br>
+          <a href="{% url 'all_cases' %}"><b>All Cases</b></a>
+        </h4>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

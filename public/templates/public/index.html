@@ -1,0 +1,641 @@
+{% load static %}
+{% load mathfilters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <title>
+    iGET - Information for Guidance and Education Trust
+  </title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Nucleo Icons -->
+  <link href="{% static 'assets/css/nucleo-icons.css' %}" rel="stylesheet" />
+  <link href="{% static 'assets/css/nucleo-svg.css' %}" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <link href="{% static 'assets/css/font-awesome.css' %}" rel="stylesheet" />
+  <link href="{% static 'assets/css/nucleo-svg.css' %}" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="{% static 'assets/css/argon-design-system.css' %}" rel="stylesheet" />
+  <link href="{% static 'assets/css/custom.css' %}" rel="stylesheet" />
+  <style>
+    .floating-btn{
+        width: 60px;
+        height: 60px;
+        display: flex:
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        position: fixed;
+        bottom: 60px;
+        left: 60px;
+        z-index: 99;
+    }
+    @media screen and (max-width: 405px) {
+      .floating-btn {
+        bottom: 30px;
+        left: 30px;
+      }
+    }
+    .wa{
+      right: 200px;
+      background: #25D366;
+    }
+  </style>
+</head>
+
+<body class="landing-page">
+  <a target="new" href="https://wa.me/+919886020345/?text=Hi I have visited your site page https://www.igetcenter.com{{request.path}}"><i class="text-center pt-3 floating-btn wa fa fa-whatsapp text-white fa-2x"></i></a>
+  <!-- Navbar -->
+  <div class="bg-secondary py-2 row text-center">
+    <div class="col-md-4 text-white"><i class="fa fa-envelope"></i> igetbangalore@gmail.com</div>
+    <div class="col-md-4 text-white">Welcome to <b>iGET</b></div>
+    <div class="col-md-4 text-white">
+      <a target="_blank" href="https://twitter.com/igetbengaluru" class="px-2 text-white">
+        <span class="btn-inner--icon"><i class="fa fa-twitter"></i></span>
+      </a>
+      <a target="_blank" href="https://www.facebook.com/igetbengaluru/" class="px-2 text-white">
+        <span class="btn-inner--icon"><i class="fab fa-facebook"></i></span>
+      </a>
+      <a target="_blank" href="https://www.instagram.com/igetbengaluru" class="px-2 text-white">
+        <span class="btn-inner--icon"><i class="fa fa-instagram"></i></span>
+      </a>
+    </div>
+  </div>
+  <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-white navbar-light py-2">
+    <div class="container">
+      <a class="navbar-brand mr-lg-5" href="{% url 'index' %}">
+        <img src="{% static 'assets/img/brand/Asset 2.png' %}" style="width: 70px; height: auto;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbar_global">
+        <div class="navbar-collapse-header">
+          <div class="row">
+            <div class="col-6 collapse-brand">
+              <a href="{% url 'index' %}">
+                <img src="{% static 'assets/img/brand/Asset 2.png' %}">
+              </a>
+            </div>
+            <div class="col-6 collapse-close">
+              <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'index' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'all_cases' %}">Causes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'gallery' %}">Gallery</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'blog' %}">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'events' %}">Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'media' %}">Media Spotlights</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'contact' %}">Contact Us</a>
+          </li>
+          {% if request.user.is_authenticated %}
+          <li class="nav-item d-none d-lg-block">
+            <a href="{% if request.user.get_group == 'admin' %}
+                        {% url 'a_dashboard' %}
+                      {% else %}
+                        {% url 'u_dashboard' %} {% endif %}" class="btn btn-outline-secondary">
+              <span class="nav-link-inner--text">Dashboard</span>
+            </a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'login' %}">Sign in</a>
+          </li>
+          <li class="nav-item d-none d-lg-block">
+            <a href="{% url 'register' %}" class="btn btn-secondary">
+              <span class="nav-link-inner--text">Sign up</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navbar -->
+  <div class="wrapper">
+    <div class="section section-hero section-shaped"
+         style="background: linear-gradient(0deg, rgba(29, 42, 99, 0.8), rgba(29, 42, 99, 0.8)), url('static/assets/img/brand/img-4.jpeg') no-repeat center center fixed;
+                background-size: cover;">
+      <div class="page-header">
+        <div class="container shape-container d-flex align-items-center py-lg">
+          <div class="col px-0">
+            <div class="row align-items-center justify-content-center">
+              <div class="col-lg-7 text-center">
+
+                <h1 class="text-white display-1" data-aos="fade-up" data-aos-duration="1000">
+                  <img src="{% static 'assets/img/brand/2 (1).png' %}" style="width: 205px; height: auto;">
+                </h1>
+                <h5 class="font-weight-light text-white pt-3" data-aos="fade-up" data-aos-duration="1500">
+                  Information for Guidance and Education Trust (iGET), Bengaluru is a
+                  12A &amp; 80G enabled under the Income Tax Act, 1961.
+                  Donations eligible for income tax benefits
+                </h5>
+                <div class="btn-wrapper mt-4">
+                  <a href="{% url 'all_cases' %}" class="btn rounded-pill btn-secondary mt-3 mb-sm-0" data-aos="fade-up" data-aos-duration="2000">
+                    <span class="btn-inner--text">View Causes</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="separator separator-bottom separator-skew zindex-100">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+      </div>
+    </div>
+    <div class="section features-6">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6" data-aos="fade-right" data-aos-duration="700">
+            <div class="info info-horizontal info-hover-primary">
+              <div class="description pl-4">
+                <h4 class="title display-3 text-center text-primary" style="border-bottom: 2px solid #bfa449;">
+                  <img src="{% static 'assets/img/brand/Asset 3.png' %}" style="width: 25px; height: auto;">
+                  Who are we?
+                </h4>
+                <p>The Information for Guidance and Education Trust (iGET) is a non-profit public charitable organization established with the idea of promoting peace, inculcating socio-religious tolerance among the people to foster unity and brotherhood and lastly, to help the poor, especially in the fields of education and healthcare. </p>
+                <a href="{% url 'about' %}" style="transition: 0.3s ease-in-out;" class="btn rounded-pill btn-outline-primary ">Learn more</a>
+              </div>
+            </div>
+            <div class="info info-horizontal info-hover-primary mt-3 mx-auto">
+              <div class="description pl-4">
+                <h5 class="title display-4 text-primary">Our Objectives</h5>
+                <ul class="c-bullet">
+                  <li class="pb-2 paragraph">To promote peace and social harmony among the masses and instill the feeling of universal brotherhood.</li>
+                  <li class="pb-2 paragraph">Offer scholarships to needy and deserving students.</li>
+                  <li class="pb-2 paragraph">Establish educational institutions to serve masses</li>
+                  <li class="pb-2 paragraph">Conduct social service programmes for society's betterment like distribution of food packets, blankets and clothes to homeless.</li>
+                  <li class="pb-2 paragraph">Respond to the needs of orphans by providing them career assistance and social guidance.</li>
+                  <li class="pb-2 paragraph">To equip youths and fresh graduates with soft skills that help them find the job of their choice.</li>
+                  <li class="pb-2 paragraph">To help single-mothers and widows become self-reliant.</li>
+                  <li class="pb-2 paragraph">Organise meetings, lectures, discussions, seminars, symposiums, competitions and debates on social and environmental issues.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-10 mx-auto" data-aos="fade-left" data-aos-duration="750">
+            <img class="ml-lg-5" src="{% static 'assets/img/brand/small-plant-with-coins-min.jpg' %}" width="100%">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section features-6 bg-primary border-secondary">
+      <div class="container">
+        <div class="info info-horizontal info-hover-primary">
+          <div class="description pl-4" data-aos="fade-down" data-aos-duration="700">
+            <h3 class="title text-white text-center">
+              <img src="{% static 'assets/img/brand/Asset 3.png' %}" style="width: 25px; height: auto;">
+              Our Vision
+            </h3>
+            <h6 class="text-center opacity-8 text-white">To make a difference in the lives of people by promoting peace and charity</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section features-1">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 mx-auto text-center mb-3">
+            <h4 class="display-3">Categories</h4>
+          </div>
+        </div>
+        <div class="row justify-content-center mb-5">
+          <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in-up" data-aos-duration="700">
+            <img src="{% static 'assets/img/medical.jpg' %}" width="100%">
+            <div class="info card shadow pb-4 px-3 cat-cards">
+              <h6 class="info-title text-uppercase text-primary">Medical Aid</h6>
+              <p class="description opacity-9">IGET greatly contributes in administering medical aid to the destitute communities by granting financial support to verified medical cases, wherein the patient is unable to afford treatment. We also help in negotiating with the authorities to provide a concession for the patient’s medical bills.</p>
+
+              <a href="{% url 'all_cases' %}?type=Medical" class="btn rounded-pill btn-primary mt-3" style="transition: 0.25s ease-in-out">Donate</a>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in-up" data-aos-duration="700">
+            <img src="{% static 'assets/img/brand/hungry-children-being-fed-by-charity-min.jpg' %}" width="100%">
+            <div class="info card shadow pb-4 px-3 cat-cards">
+              <h6 class="info-title text-uppercase text-primary">General Aid</h6>
+              <p class="description opacity-9">It is one of the aids granted by IGET, wherein we largely provide financial support or loans for the purposes of rent, daily expenditure and medicines to the underprivileged and down-trodden community. The financial support is either given by the organization or through the funds generated by our generous donors.</p>
+
+              <a href="{% url 'all_cases' %}?type=General" class="btn rounded-pill btn-primary" style="transition: 0.25s ease-in-out">Donate</a>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in-up" data-aos-duration="700">
+            <img src="{% static 'assets/img/educational.jpg' %}" width="100%">
+            <div class="info card shadow pb-4 px-3 cat-cards">
+              <h6 class="info-title text-uppercase text-primary">Educational Aid</h6>
+              <p class="description opacity-9">Education and knowledge are one of the forefront values of IGET. Thus, the organization partakes immensely in providing financial aid for those deserving students who are unable to pay for their tuition fees. The financial aid is either given by the organization or through the funds generated by our generous donors.</p>
+
+              <a href="{% url 'all_cases' %}?type=Educational" class="btn rounded-pill btn-primary" style="transition: 0.25s ease-in-out">Donate</a>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in-up" data-aos-duration="700">
+            <img src="{% static 'assets/img/medicine.jpg' %}" width="100%">
+            <div class="info card shadow pb-4 px-3 cat-cards">
+              <h6 class="info-title text-uppercase text-primary">Medicine Aid</h6>
+              <p class="description opacity-9">Apart from financial aids, IGET assists the members of the underprivileged community who do not have proper access to healthcare, by providing monthly medication for those suffering with diabetes, hypertension and other long-standing illnesses.</p>
+
+              <a href="{% url 'all_cases' %}?type=Medicine" class="btn rounded-pill btn-primary mt-1" style="transition: 0.25s ease-in-out">Donate</a>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in-up" data-aos-duration="700">
+            <img src="{% static 'assets/img/prov.jpg' %}" width="100%">
+            <div class="info card shadow pb-4 px-3 cat-cards">
+              <h6 class="info-title text-uppercase text-primary">Provisional Aid</h6>
+              <p class="description opacity-9">IGET has taken part in providing provisional aids by arranging fixed monthly ration to financially poor widows, orphans and families. We also conduct yearly food and ration kit distributions among the needy people.</p>
+
+              <a href="{% url 'all_cases' %}?type=Provisional" class="btn rounded-pill btn-primary mt-4" style="transition: 0.25s ease-in-out">Donate</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section features-1">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 mx-auto text-center">
+            <h4 class="display-3">Recent Causes</h4>
+            <p class="lead">Some recently added causes that you can donate for and help those who are in need</p>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          {% for case in top_cases %}
+            <div class="col-md-4" data-aos="zoom-in-up" data-aos-duration="700">
+              <span class="badge badge-secondary badge-pill mb-3 text-white">{{case.type}}</span>
+              <div class="info card shadow pb-4 px-3">
+                {% if case.thumbnail %}
+                <img src="{{ case.thumbnail.url }}" height="180">
+                {% else %}
+                <img src="{% static 'assets/img/default-thumbnail.jpg' %}" height="180">
+                {% endif %}
+                <h6 class="info-title text-uppercase text-primary">{{case.title}}</h6>
+                <p class="description opacity-8">{{case.description|safe|truncatewords:25}}</p>
+                <div class="progress-wrapper">
+                  <div class="progress-info">
+                    <div class="progress-label">
+                      <h6>Raised &#8377;{{case.proper_total}} of &#8377;{{case.requested_amount}}</h6>
+                    </div>
+                    {% with test=case.proper_total|div:case.requested_amount %}
+                    <div class="progress-percentage">
+                      <span>{{ test|mul:100|floatformat:2 }}%</span>
+                    </div>
+                  </div>
+                  <div class="progress">
+                    <div class="progress-bar bg-secondary" role="progressbar"
+                         aria-valuenow="{{case.total_collected|add:case.total_online}}" aria-valuemin="0"
+                         aria-valuemax="{{case.requested_amount}}" style="width: {{test|mul:100}}%;"></div>
+                  </div>
+                    {% endwith %}
+                </div>
+                <a href="{% url 'case_details' case.uuid %}" class="my-3 btn rounded-pill btn-outline-primary">View More</a>
+                {% if case.status == 'Green' %}
+                <button class="btn rounded-pill btn-primary" style="transition: 0.25s ease-in-out" data-toggle="modal" data-target="#exampleModalLong{{case.id}}">Donate</button>
+                {% else %}
+                  <b class="text-center">Sorry, this case is closed</b>
+                {% endif %}
+              </div>
+            </div>
+
+            <div x-data="{ amount: 0 }" class="modal fade" id="exampleModalLong{{case.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle{{case.id}}">Donation To {{case.title}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form method="post" action="{% url 'checkout' case.id %}">
+                        <input type="text" value="{{ case.type }}" hidden name="type">
+                        {% if request.user.is_authenticated %}
+                        <label>Enter Amount</label>
+                        <input x-model="amount" class="form-control" name="amount" type="text" placeholder="Enter Amount (&#8377;)" required><br>
+                        <label>Pan No.</label>
+                        <input class="form-control mb-2" name="pan" type="text" placeholder="PAN No." :required="amount > 4999">
+                        <p>PAN Number is Mandatory for donations above 5000/- to issue 80G and 12A receipt.</p>
+                        <template x-if="amount > 4999">
+                            <p>For the donation above 5000/- PAN number of individual/company/institution is mandatory as per income tax department</p>
+                        </template>
+
+                          {% if request.user.userprofile_set.all.first %}
+                            <input type="submit" value="Donate" class="btn btn-primary">
+                          {% else %}
+                            <a href="{% url 'complete_profile' %}" class="btn btn-primary">Donate</a>
+                          {% endif %}
+
+                        {% else %}
+                          <label>First Name</label>
+                          <input class="form-control mb-2" name="first_name" type="text" placeholder="John" required>
+
+                          <label>Last Name</label>
+                          <input class="form-control mb-2" name="last_name" type="text" placeholder="Doe" required>
+
+                          <label>Gender</label>
+                          <select class="form-control mb-2" name="gender" required>
+                            <option value="" selected>----</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                          </select>
+
+                          <label>PAN No.</label>
+                          <input class="form-control mb-2" name="pan" type="text" placeholder="PAN No." :required="amount > 4999">
+                          <p>PAN Number is Mandatory for donations above &#8377;5000/- to issue 80G and 12A receipt.</p>
+                          <template x-if="amount > 4999">
+                              <p>For the donation above &#8377;5000/- PAN number of individual/company/institution is mandatory as per income tax department</p>
+                          </template>
+
+                          <label>Address</label>
+                          <input class="form-control mb-2" name="address" type="text" placeholder="Address" required>
+
+                          <label>City</label>
+                          <input class="form-control mb-2" name="city" type="text" placeholder="City" required>
+                          <label>State</label>
+                          <input class="form-control mb-2" name="state" type="text" placeholder="State" required>
+                          <label>Country</label>
+                          <input class="form-control mb-2" name="country" type="text" placeholder="Country" required>
+
+                          <label>Phone Number</label>
+                          <input class="form-control mb-2" name="phone" type="tel" placeholder="Phone Number" required>
+
+                          <label>Email</label>
+                          <input class="form-control mb-2" name="email" type="email" placeholder="john@mail.com" required>
+
+                          <label>Enter Amount</label>
+                          <input x-model="amount" class="form-control" name="amount" type="text" placeholder="Enter Amount (&#8377;)" required><br>
+
+                          <input type="submit" value="Donate" class="btn btn-primary">
+                        {% endif %}
+                      </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="section features-6 bg-secondary">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-3 col-md-6 mb-4" data-aos="zoom-in-up" data-aos-duration="600">
+            <div class="info info-horizontal info-hover-primary">
+              <div class="description pl-4 text-center">
+                <img src="{% static 'assets/img/education.png' %}" width="60px">
+                <h3 class="title text-white text-center">&#8377;9.5 Lakhs</h3>
+                <h6 class="text-center opacity-9 text-white">Scholarships worth 9.5 Lakhs</h6>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4"  data-aos="zoom-in-up" data-aos-duration="700">
+            <div class="info info-horizontal info-hover-primary">
+              <div class="description pl-4 text-center">
+                <img src="{% static 'assets/img/stethoscope.png' %}" width="60px">
+                <h3 class="title text-white text-center">&#8377;13 Lakhs</h3>
+                <h6 class="text-center opacity-9 text-white">Medical help worth 13 Lakhs</h6>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4" data-aos="zoom-in-up" data-aos-duration="800">
+            <div class="info info-horizontal info-hover-primary">
+              <div class="description pl-4 text-center">
+                <img src="{% static 'assets/img/emergency.png' %}" width="60px">
+                <h3 class="title text-white text-center">&#8377;13.25 Lakhs</h3>
+                <h6 class="text-center opacity-9 text-white">Amphan Relief Fund worth 13.25 Lakhs</h6>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4" data-aos="zoom-in-up" data-aos-duration="900">
+            <div class="info info-horizontal info-hover-primary">
+              <div class="description pl-4 text-center">
+                <img src="{% static 'assets/img/virus.png' %}" width="60px">
+                <h3 class="title text-white text-center">&#8377;12 Lakhs</h3>
+                <h6 class="text-center opacity-9 text-white">Covid-19 Relief Fund worth 12 Lakhs</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section features-6">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6 col-10 mx-auto" data-aos="fade-right" data-aos-duration="800">
+            <img class="ml-lg-3" src="{% static 'assets/img/brand/hand-giving-soup-bowl-needy-person-min.jpg' %}" width="100%">
+          </div>
+          <div class="col-lg-6" data-aos="fade-left" data-aos-duration="700">
+            <div class="info info-horizontal info-hover-primary mt-3 mx-auto">
+              <div class="description pl-4">
+                <h4 class="title display-3 text-primary" style="border-bottom: 2px solid #bfa449;">
+                  <img src="{% static 'assets/img/brand/Asset 3.png' %}" style="width: 25px; height: auto;">
+                  Achievements So Far
+                </h4>
+                <ul class="c-bullet">
+                  <li class="py-1">iGET has provided educational aid in the form of scholarships to the tune of &#8377;Z9.5 lakh to poor, needy and meritorious students which include those pursuing BDS and MBBS degrees.</li>
+                  <li class="py-1">iGET has spent over &#8377;13 lakh towards medical help for complex treatment procedures and monthly medicines. </li>
+                  <li class="py-1">Assistance to poor and shelterless by way of providing free blankets during winter. </li>
+                  <li class="py-1">Frequent visits to orphanages to connect with deprived children emotionally and motivating them to learn, achieve and grow.</li>
+                  <li class="py-1">Arranged livelihood source by purchasing pushcart and investing in buying an auto to make individuals self-reliant. </li>
+                  <li class="py-1">Montly-aid to widows and deserted senior citizens. </li>
+                  <li class="py-1">Helping those struck by natural calamities by organising campaigns to collect basic supplies like clothes, food packets and medicines. Our team was engaged in relief activities during floods in Karnataka, Kerala and West Bengal.</li>
+<!--                  <li class="py-1">With Amphan cyclone wreaking havoc in West Bengal in May, 2020, iGET, along with other NGOs, raised funds to the tune of 213.25 lakh for the relief works in 24 Pa ragans district. </li>-->
+<!--                  <li class="py-1">During the pandemic induced lockdown, a Covid-19 Relief Fund was set up through which 1,000 ration kits worth 212 lakh were distributed among the poor and distressed. </li>-->
+<!--                  <li class="py-1">As a mark of appreciation to our policemen who work tirelessly to ensure law and order in the city, food kits were distributed among the personnel during the pandemic.</li>-->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section features-6 bg-primary text-center"
+         style="background: linear-gradient(0deg, rgba(29, 42, 99, 0.8), rgba(29, 42, 99, 0.8)), url('static/assets/img/brand/hand-coins-min.jpg') no-repeat center center fixed;
+                background-size: cover;">
+      <div class="container align-items-center">
+        <div class="info info-horizontal info-hover-primary">
+          <div class="description pl-4" data-aos="fade-down" data-aos-duration="700">
+            <h3 class="title text-white text-center">
+              <img src="{% static 'assets/img/brand/Asset 3.png' %}" style="width: 25px; height: auto;">
+              Become A Volunteer
+            </h3>
+            <h6 class="text-center opacity-8 text-white">Become a volunteer and help those in need</h6>
+            <a href="{% url 'volunteer' %}" class="mt-2 text-center btn rounded-pill btn-secondary" style="transition: 0.25s ease-in-out">
+              Become A Volunteer
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section features-6">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-10 col-10 mx-auto">
+            <h3 class="title text-center">Contact Us</h3>
+
+            <div class="row text-center mb-3">
+              <div class="col-md-6 mb-2">
+                <button class="btn btn-icon-only btn-primary rounded-circle" data-toggle="tooltip" data-original-title="Call us">
+                  <span class="btn-inner--icon"><i class="fa fa-phone"></i></span>
+                </button>
+                <span>9886020345</span>
+              </div>
+              <div class="col-md-6">
+                <button class="btn-icon-only rounded-circle btn btn-primary" data-toggle="tooltip" data-original-title="Mail Us">
+                  <span class="btn-inner--icon"><i class="fa fa-envelope"></i></span>
+                </button>
+                <span>igetbangalore@gmail.com</span>
+              </div>
+            </div>
+            <div class="card bg-white shadow border-0" data-aos="zoom-in-up" data-aos-duration="700">
+              <div class="card-body px-lg-7 py-lg-5">
+                <h4>Send us a message</h4>
+                <form role="form" method="POST">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="form-group col-md-6">
+                      <div class="input-group input-group-alternative mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                        </div>
+                        <input class="form-control" placeholder="Name" name="name" type="text">
+                      </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <div class="input-group input-group-alternative mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                        </div>
+                        <input class="form-control" placeholder="Email" type="email" name="email">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group focused">
+                    <div class="input-group input-group-alternative">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                      </div>
+                      <textarea class="form-control" placeholder="Write your message.." name="message"></textarea>
+                    </div>
+                  </div>
+                  <div class="text-center">
+                    <input type="submit" class="btn btn-secondary mt-4" value="Send Message">
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br /><br />
+    <footer class="footer bg-primary">
+      <div class="container">
+        <div class="row row-grid align-items-center mb-5">
+          <div class="col-lg-4 pr-5">
+            <h4 class="text-white font-weight-light mb-2" style="border-bottom: 2px solid #bfa449;">About Us</h4>
+            <p class="mb-0 font-weight-light text-white">
+              <b>iGET</b> is an organisation that hopes to bring people together and
+              spark a sense of empathy in them.
+            </p>
+          </div>
+          <div class="col-lg-4">
+            <h4 class="text-white font-weight-light mb-2 mt-2 display-4">Useful Links</h4>
+            <ul style="list-style-type: none; margin: 0; padding: 0;" class="mb-0">
+              <li><a href="{% url 'about' %}" class="text-white py-2 ">About</a></li>
+              <li><a href="{% url 'all_cases' %}" class="text-white py-2 heading">View Cases</a></li>
+              <li><a href="{% url 'contact' %}" class="text-white py-2 heading">Contact</a></li>
+              <li><a href="#" class="text-white py-2 heading">Sign in</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-4 text-lg-center btn-wrapper">
+            <a target="_blank" href="https://twitter.com/igetbengaluru" rel="nofollow" class="btn btn-icon-only btn-secondary rounded-circle" data-toggle="tooltip" data-original-title="Follow us">
+              <span class="btn-inner--icon"><i class="fa fa-twitter"></i></span>
+            </a>
+            <a target="_blank" href="https://www.facebook.com/igetbengaluru/" rel="nofollow" class="btn-icon-only rounded-circle btn btn-secondary" data-toggle="tooltip" data-original-title="Like us">
+              <span class="btn-inner--icon"><i class="fab fa-facebook"></i></span>
+            </a>
+            <a target="_blank" href="https://www.instagram.com/igetbengaluru" rel="nofollow" class="btn btn-icon-only btn-secondary rounded-circle" data-toggle="tooltip" data-original-title="Follow us">
+              <span class="btn-inner--icon"><i class="fa fa-instagram"></i></span>
+            </a>
+            <span class="text-white">@igetbengaluru</span>
+          </div>
+        </div>
+        <hr>
+        <div class="row align-items-center justify-content-md-between">
+          <div class="col-md-6">
+            <div class="copyright text-white">
+              &copy; 2021 <a href="{% url 'index' %}" class="text-white" target="_blank">iGET</a> | All Rights Reserved
+            </div>
+            <p class="text-white">Designed &amp; Developed By
+              <a class="text-secondary" href="https://www.codesquare.co.in" target="_blank">
+                <b>Code Square Technologies Pvt Ltd</b>
+              </a>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <ul class="nav nav-footer justify-content-end">
+              <li class="nav-item">
+                <a href="{% url 'terms_of_usage' %}" class="nav-link">Terms &amp; Conditions</a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'privacy_policy' %}" class="nav-link">Privacy Policy</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+  <!--   Core JS Files   -->
+  <script src="{% static 'assets/js/core/jquery.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'assets/js/core/popper.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'assets/js/core/bootstrap.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'assets/js/plugins/perfect-scrollbar.jquery.min.js' %}"></script>
+  <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+  <script src="{% static 'assets/js/plugins/bootstrap-switch.js' %}"></script>
+  <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+  <script src="{% static 'assets/js/plugins/nouislider.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'assets/js/plugins/moment.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/datetimepicker.js' %}" type="text/javascript"></script>
+  <script src="{% static 'assets/js/plugins/bootstrap-datepicker.min.js' %}"></script>
+  <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
+  <!--  Google Maps Plugin    -->
+  <script src="https://maps.googleapis.com/maps/api/js"></script>
+  <script src="{% static 'assets/js/argon-design-system.min.js' %}" type="text/javascript"></script>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script src="https://unpkg.com/alpinejs@3.7.1/dist/cdn.min.js"></script>
+</body>
+
+</html>

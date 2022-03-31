@@ -1,0 +1,132 @@
+{% extends 'administration/admin_base.html' %}
+{% load static %}
+{% block content %}
+<div class="header bg-primary pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-7">
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+              <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="#">Users</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">All Registered Users</h3>
+            </div>
+            <div class="col">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Add New Sub-Admin
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Role</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for u in users %}
+              <tr>
+                  {% if u.get_group == 'subadmin' %}
+                    <th><a href="{% url 'a_rem_sub' u.id %}" class="btn btn-sm btn-danger text-white">Remove Subadmin Status</a></th>
+                  {% else %}
+                <th scope="row">
+                  <a href="{% url 'a_add_sub' u.id %}" class="btn btn-sm btn-primary text-white">Make Sub-Admin</a>
+                </th>
+                  {% endif %}
+                <th scope="row">
+                  {{ u.first_name }} {{ u.lastname|default:'' }}
+                </th>
+                <td>
+                  {{u.email}}
+                </td>
+                <td>
+                  {{u.phone_number}}
+                </td>
+                <td>
+                  {{u.get_group}}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <form class="modal-content" method="post">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Sub-Admin</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group mb-3">
+              <div class="input-group input-group-merge input-group-alternative">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-single-02"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Name" type="text" name="name">
+              </div>
+         </div>
+         <div class="form-group mb-3">
+              <div class="input-group input-group-merge input-group-alternative">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Email" type="email" name="email">
+              </div>
+         </div>
+        <div class="form-group mb-3">
+              <div class="input-group input-group-merge input-group-alternative">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-phone"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Phone" type="tel" name="phone">
+              </div>
+         </div>
+          <div class="form-group mb-3">
+              <div class="input-group input-group-merge input-group-alternative">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-key-25"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Password" type="text" name="password">
+              </div>
+         </div>
+          <p class="text-danger"><b>PLEASE STORE THE PASSWORD ELSEWHERE SINCE THE PASSWORD WON'T BE SHOWN FOR SECURITY REASONS</b></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" value="Add">
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

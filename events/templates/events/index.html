@@ -1,0 +1,35 @@
+{% extends 'public/base.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block title %} Events - iGET {% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <div class="section features-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto text-center">
+        <h4 class="display-3">Upcoming Events - iGET</h4>
+      </div>
+    </div>
+    <br>
+    <div class="row justify-content-center">
+      {% for e in upcoming %}
+        <div class="col-md-5" data-aos="zoom-in-up" data-aos-duration="700">
+          <div class="info card shadow pb-4">
+            {% if e.thumbnail %}
+            <img src="{{ e.thumbnail.url }}" class="img-fluid">
+            {% endif %}
+            <div class="px-3">
+              <h6 class="info-title text-uppercase text-primary">{{ e.title }}</h6>
+              <p><i class="text-primary ni ni-calendar-grid-58"></i> {{e.start_date}} - {{e.end_date}}</p>
+              <p><i class="text-primary ni ni-pin-3"></i> {{e.location}}</p>
+              <a href="{% url 'event_details' e.id %}"><b>VIEW MORE</b></a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,226 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <title>
+    {% block title %} {% endblock %}
+  </title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <!-- Nucleo Icons -->
+  <link href="{% static 'assets/css/nucleo-icons.css' %}" rel="stylesheet" />
+  <link href="{% static 'assets/css/nucleo-svg.css' %}" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <link href="{% static 'assets/css/font-awesome.css' %}" rel="stylesheet" />
+  <link href="{% static 'assets/css/nucleo-svg.css' %}" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="{% static 'assets/css/argon-design-system.css' %}" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="{% static 'assets/css/custom.css' %}" rel="stylesheet" />
+  <style>
+    .floating-btn{
+        width: 60px;
+        height: 60px;
+        display: flex:
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        position: fixed;
+        bottom: 60px;
+        left: 60px;
+        z-index: 99;
+    }
+    @media screen and (max-width: 405px) {
+      .floating-btn {
+        bottom: 30px;
+        left: 30px;
+      }
+    }
+    .wa{
+      right: 200px;
+      background: #25D366;
+    }
+  </style>
+</head>
+
+<body class="landing-page">
+  <a target="new" href="https://wa.me/+919886020345/?text=Hi I have visited your site page https://www.igetcenter.com{{request.path}}"><i class="text-center pt-3 floating-btn wa fa fa-whatsapp text-white fa-2x"></i></a>
+  <!-- Navbar -->
+  <div class="bg-secondary py-2 row text-center">
+    <div class="col-md-4 text-white"><i class="fa fa-envelope"></i> igetbangalore@gmail.com</div>
+    <div class="col-md-4 text-white">Welcome to <b>iGET</b></div>
+    <div class="col-md-4 text-white">
+      <a target="_blank" href="https://twitter.com/igetbengaluru" class="px-2 text-white">
+        <span class="btn-inner--icon"><i class="fa fa-twitter"></i></span>
+      </a>
+      <a target="_blank" href="https://www.facebook.com/igetbengaluru/" class="px-2 text-white">
+        <span class="btn-inner--icon"><i class="fab fa-facebook"></i></span>
+      </a>
+      <a target="_blank" href="https://www.instagram.com/igetbengaluru" class="px-2 text-white">
+        <span class="btn-inner--icon"><i class="fa fa-instagram"></i></span>
+      </a>
+    </div>
+  </div>
+  <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-white navbar-light shadow py-2">
+    <div class="container">
+      <a class="navbar-brand mr-lg-5" href="{% url 'index' %}">
+        <img src="{% static 'assets/img/brand/Asset 2.png' %}" style="width: 70px; height: auto;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbar_global">
+        <div class="navbar-collapse-header">
+          <div class="row">
+            <div class="col-6 collapse-brand">
+              <a href="{% url 'index' %}">
+                <img src="{% static 'assets/img/brand/Asset 2.png' %}">
+              </a>
+            </div>
+            <div class="col-6 collapse-close">
+              <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'index' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'all_cases' %}">Causes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'gallery' %}">Gallery</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'blog' %}">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'events' %}">Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'media' %}">Media Spotlights</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'contact' %}">Contact Us</a>
+          </li>
+          {% if request.user.is_authenticated %}
+          <li class="nav-item d-none d-lg-block">
+            <a href="{% if request.user.get_group == 'admin' %}
+                        {% url 'a_dashboard' %}
+                      {% else %}
+                        {% url 'u_dashboard' %} {% endif %}" class="btn btn-outline-secondary">
+              <span class="nav-link-inner--text">Dashboard</span>
+            </a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="{% url 'login' %}">Sign in</a>
+          </li>
+          <li class="nav-item d-none d-lg-block">
+            <a href="{% url 'register' %}" class="btn btn-secondary">
+              <span class="nav-link-inner--text">Sign up</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% block content %}
+
+  {% endblock %}
+  <br /><br />
+  <footer class="footer bg-primary">
+      <div class="container">
+        <div class="row row-grid align-items-center mb-5">
+          <div class="col-lg-4 pr-5">
+            <h4 class="text-white font-weight-light mb-2" style="border-bottom: 2px solid #bfa449;">About Us</h4>
+            <p class="mb-0 font-weight-light text-white">
+              <b>iGET</b> is an organisation that hopes to bring people together and
+              spark a sense of empathy in them.
+            </p>
+          </div>
+          <div class="col-lg-4">
+            <h4 class="text-white font-weight-light mb-2 mt-2 display-4">Useful Links</h4>
+            <ul style="list-style-type: none; margin: 0; padding: 0;" class="mb-0">
+              <li><a href="{% url 'about' %}" class="text-white py-2 ">About</a></li>
+              <li><a href="{% url 'all_cases' %}" class="text-white py-2 heading">View Cases</a></li>
+              <li><a href="{% url 'contact' %}" class="text-white py-2 heading">Contact</a></li>
+              <li><a href="#" class="text-white py-2 heading">Sign in</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-4 text-lg-center btn-wrapper">
+            <a target="_blank" href="https://twitter.com/igetbengaluru" rel="nofollow" class="btn btn-icon-only btn-secondary rounded-circle" data-toggle="tooltip" data-original-title="Follow us">
+              <span class="btn-inner--icon"><i class="fa fa-twitter"></i></span>
+            </a>
+            <a target="_blank" href="https://www.facebook.com/igetbengaluru/" rel="nofollow" class="btn-icon-only rounded-circle btn btn-secondary" data-toggle="tooltip" data-original-title="Like us">
+              <span class="btn-inner--icon"><i class="fab fa-facebook"></i></span>
+            </a>
+            <a target="_blank" href="https://www.instagram.com/igetbengaluru" rel="nofollow" class="btn btn-icon-only btn-secondary rounded-circle" data-toggle="tooltip" data-original-title="Follow us">
+              <span class="btn-inner--icon"><i class="fa fa-instagram"></i></span>
+            </a>
+            <span class="text-white">@igetbengaluru</span>
+          </div>
+        </div>
+        <hr>
+        <div class="row align-items-center justify-content-md-between">
+          <div class="col-md-6">
+            <div class="copyright text-white">
+              &copy; 2021 <a href="{% url 'index' %}" class="text-white" target="_blank">iGET</a> | All Rights Reserved
+            </div>
+            <p class="text-white">Designed &amp; Developed By
+              <a class="text-secondary" href="https://www.codesquare.co.in" target="_blank">
+                <b>Code Square Technologies Pvt Ltd</b>
+              </a>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <ul class="nav nav-footer justify-content-end">
+              <li class="nav-item">
+                <a href="{% url 'terms_of_usage' %}" class="nav-link">Terms &amp; Conditions</a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'privacy_policy' %}" class="nav-link">Privacy Policy</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+</div>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+  <!--   Core JS Files   -->
+  <script src="{% static 'assets/js/core/jquery.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'assets/js/core/popper.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'assets/js/core/bootstrap.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'assets/js/plugins/perfect-scrollbar.jquery.min.js' %}"></script>
+  <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+  <script src="{% static 'assets/js/plugins/bootstrap-switch.js' %}"></script>
+  <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+  <script src="{% static 'assets/js/plugins/nouislider.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'assets/js/plugins/moment.min.js' %}"></script>
+  <script src="{% static 'assets/js/plugins/datetimepicker.js' %}" type="text/javascript"></script>
+  <script src="{% static 'assets/js/plugins/bootstrap-datepicker.min.js' %}"></script>
+  <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
+  <!--  Google Maps Plugin    -->
+  <script src="https://maps.googleapis.com/maps/api/js"></script>
+  <script src="{% static 'assets/js/argon-design-system.min.js' %}" type="text/javascript"></script>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script src="https://unpkg.com/alpinejs@3.7.1/dist/cdn.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+{% extends 'public/base.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block title %} Become A Volunteer - iGET {% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <div class="section features-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto text-center">
+        <h4 class="display-3">Become a volunteer - iGET</h4>
+      </div>
+    </div>
+    <br>
+    <div class="row justify-content-center">
+      <form method="POST" class="col-md-10">
+        {% csrf_token %}
+        <div class="pl-lg-4">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Full Name</label>
+                {{form.name}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Email</label>
+                {{form.email}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Phone Number (Whatsapp)</label>
+                {{form.phone}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Gender</label>
+                {{form.gender}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Education Background</label>
+                {{form.education_background}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Address</label>
+                {{form.address}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Occupation</label>
+                {{form.occupation}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">How are you willing to contribute?</label>
+                {{form.way_of_contribution}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">How many hours per day can you contribute?</label>
+                {{form.hours_per_day}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label">Date of Birth</label>
+                {{form.date_of_birth}}
+              </div>
+            </div>
+          </div>
+          <input class="btn btn-primary" value="{% if edit %} Save Changes {% else %} Submit {% endif %}" type="submit">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
