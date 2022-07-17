@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string, get_template
 from django.views.decorators.csrf import csrf_exempt
 from paywix.payu import Payu
-from weasyprint import HTML, CSS
+#from weasyprint import HTML, CSS
 from xhtml2pdf import pisa
 
 from .models import Case, ProjectDonation, ExtraDocs, ExtraImages
@@ -278,19 +278,3 @@ def failure(request):
     data = {k: v[0] for k, v in dict(request.POST).items()}
     response = payu.verify_transaction(data)
     return HttpResponse('Sorry, something went wrong. Please try again later')
-
-
-# TODO remove before pushing it
-def pdf_test_w(request):
-    case = Case.objects.all().first()
-    donation = ProjectDonation.objects.filter(case=case, full_name='Imran Rahman').first()
-    context = {'donation': donation, 'case': case, 'static_root': str(settings.STATIC_URL)}
-    html_string = render_to_string('projects/invoice.html', context)
-
-    pdf_file = HTML(string=html_string).write_pdf(stylesheets=[
-        CSS(settings.STATIC_URL + 'media/assets/css/argon.min.css')
-    ])
-    response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = 'filename="home_page.pdf"'
-
-    return response

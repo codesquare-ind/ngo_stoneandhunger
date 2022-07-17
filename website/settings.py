@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+import dj_database_url
 from pathlib import Path
 from decouple import config
 
@@ -26,7 +27,7 @@ SECRET_KEY = 'django-insecure-by1enogorp3!bcq$il4#esjd_ym(7amxx4f0!6_vkg@ydut1v5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.205', 'iget-center.herokuapp.com', 'www.igetcenter.com', '127.0.0.1']
+ALLOWED_HOSTS = ['stoneandhunger.herokuapp.com', 'www.stoneandhunger.com','https://stoneandhunger.sgp1.digitaloceanspaces.com', '127.0.0.1']
 
 
 # Application definition
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'paywix',
     'ckeditor',
     'ckeditor_uploader',
+    'storages',
 
     'account',
     'public',
@@ -109,7 +111,7 @@ DATABASES = {
     }
 }
 
-import dj_database_url
+
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
 
@@ -160,25 +162,36 @@ USE_TZ = True
 #
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'static/assets/files')
 
-AZURE_ACCOUNT_NAME = config('AZURE_NAME')
-AZURE_ACCOUNT_KEY = config('AZURE_KEY')
-AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+#USE_SPACES = os.getenv('USE_SPACES') == 'TRUE'
+USE_SPACES = config('USE_SPACES') == 'TRUE'
 
-AZURE_LOCATION = 'media'
-AZURE_CONTAINER = 'media'
+if USE_SPACES:
+    # settings
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_ENDPOINT_URL = 'https://sgp1.digitaloceanspaces.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    # static settings
+    AWS_LOCATION = 'static'
+    MEDIA_LOCATION = 'media'
+    STATIC_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_LOCATION}/'
+    MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{MEDIA_LOCATION}/'
+    #STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' 
+       
+    STATICFILES_STORAGE = 'storage_backends.StaticStorage'
+    DEFAULT_FILE_STORAGE = 'storage_backends.MediaStorage'   
+else:   
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    #location where django collect all static files   
+    STATIC_URL = '/static/' 
+    STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles/")    
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR,"media/")
 
-STATIC_LOCATION = 'media'
-# MEDIA_LOCATION = 'media'
-
-STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
-# MEDIA_URL = f'{STATIC_URL}assets/img/'
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
-
-DEFAULT_FILE_STORAGE = 'azure_custom.custom.AzureMediaStorage'
-STATICFILES_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+#location where you will store your static files
+STATICFILES_DIRS = [os.path.join(BASE_DIR ,"static")]
 
 CKEDITOR_BASEPATH = STATIC_URL + 'media/ckeditor/ckeditor/'
 CKEDITOR_UPLOAD_PATH = 'blogs/'
@@ -208,5 +221,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config('EMAIL_HOST')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_PW')

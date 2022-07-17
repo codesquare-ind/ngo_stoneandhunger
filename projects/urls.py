@@ -14,5 +14,5 @@ urlpatterns = [
     path('checkout/<str:id>', views.checkout, name='checkout'),
     path('success/', views.success, name='success'),
     path('failure/', views.failure, name='failure'),
-    path('pdf_test/', views.pdf_test_w, name='pdf_test'),
+    #path('pdf_test/', views.pdf_test_w, name='pdf_test'),
 ]
